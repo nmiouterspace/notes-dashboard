@@ -1,0 +1,6 @@
+node_modules/
+.env*
+*.local.*
+private/
+notes-*.json
+test-results/

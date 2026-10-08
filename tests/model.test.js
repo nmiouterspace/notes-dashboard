@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {merge,normalize,visibleItems} from '../model.js';
+const item={id:'a',type:'task',title:'Một việc',body:'',done:false,urgent:false,deleted:false,createdAt:'2026-10-08T00:00:00Z',updatedAt:'2026-10-08T00:00:00Z'};const doc=(...items)=>({version:1,items});
+test('merges devices without dropping independent edits',()=>{const a={...item,id:'a',done:true,updatedAt:'2026-10-08T01:00:00Z'},b={...item,id:'b'};assert.deepEqual(merge(doc(a),doc(item,b)),doc(a,b))});
+test('newer deletion wins over old offline copy',()=>{const deleted={...item,deleted:true,updatedAt:'2026-10-08T02:00:00Z'};assert.equal(visibleItems(merge(doc(deleted),doc(item)),'open').length,0)});
+test('urgent appears first; completed task not in reminders',()=>{const urgent={...item,id:'u',urgent:true},done={...item,id:'d',done:true};assert.deepEqual(visibleItems(doc(item,done,urgent),'open').map(x=>x.id),['u','a']);assert.equal(visibleItems(doc(done),'done').length,1)});
+test('invalid backup and duplicate IDs rejected',()=>{assert.throws(()=>normalize(doc(item,item)));assert.throws(()=>normalize(doc({...item,done:'yes'})));assert.throws(()=>normalize({version:3,items:[]}))});
+test('merging same documents is idempotent and symmetric',()=>{const a=doc(item),b=doc({...item,urgent:true});assert.deepEqual(merge(a,b),merge(b,a));assert.deepEqual(merge(merge(a,b),b),merge(a,b))});
