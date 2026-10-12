@@ -8,7 +8,7 @@ Ghi chú cá nhân và việc cần làm, có thể cài thành ứng dụng web
 - Thêm và sửa việc hoặc ghi chú; tìm kiếm và xem các danh sách riêng.
 - Lưu trên thiết bị, nhập/xuất JSON, đồng bộ riêng qua Google Drive.
 - Vật tư: tên, số lượng tồn (cho phép số lẻ), đơn vị tính, chi tiết; số lượng 0 hiển thị Hết hàng. Mở Vật tư → Thêm vật tư; bấm bút để sửa số lượng rồi Đồng bộ.
-- Các ô chọn danh sách được thu gọn thành 4 cột, kể cả trên điện thoại; ô thứ 5 xuống hàng tiếp theo.
+- Năm ô To do, Urgent, Done, Notes, Stock nằm chung một hàng, kể cả trên điện thoại.
 
 Vật tư được lưu dưới dạng note có body bắt đầu bằng `notes:inventory:v1` và JSON quantity/unit/details, tương thích với endpoint Drive v1 hiện tại. App tách vật tư khỏi ghi chú và việc cần làm. Không cần triển khai lại Apps Script. Khi hai máy cùng sửa số lượng, bản có updatedAt mới hơn được giữ; đây là số lượng tồn hiện tại, không phải sổ lịch sử nhập/xuất.
 
