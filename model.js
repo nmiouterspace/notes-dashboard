@@ -1,3 +1,4 @@
+import {mandyOf,activeMandy} from './mandy.js?v=20261014-mandy';
 import {materialOf} from './inventory.js?v=20261012-inventory';
 export function normalize(doc){
  if(!doc||doc.version!==1||!Array.isArray(doc.items)||doc.items.length>10000) throw new Error('Bản sao không đúng định dạng Notes.');
@@ -12,5 +13,5 @@ export function merge(a,b){
  }return {version:1,items:[...items.values()]};
 }
 export function visibleItems(doc,view,query=''){
- const q=query.toLocaleLowerCase('vi');return doc.items.filter(x=>!x.deleted&&(view==='materials'?!!materialOf(x):view==='notes'?x.type==='note'&&!materialOf(x):x.type==='task'&&(view==='done'?x.done:!x.done&&(view!=='urgent'||x.urgent)))&&`${x.title} ${x.body}`.toLocaleLowerCase('vi').includes(q)).sort((a,b)=>Number(b.urgent)-Number(a.urgent)||Date.parse(a.createdAt)-Date.parse(b.createdAt));
+ const q=query.toLocaleLowerCase('vi');return doc.items.filter(x=>!x.deleted&&(view==='mandy'?activeMandy(x):view==='materials'?!!materialOf(x):view==='notes'?x.type==='note'&&!materialOf(x)&&!mandyOf(x):x.type==='task'&&!mandyOf(x)&&(view==='done'?x.done:!x.done&&(view!=='urgent'||x.urgent)))&&`${x.title} ${x.body}`.toLocaleLowerCase('vi').includes(q)).sort((a,b)=>Number(b.urgent)-Number(a.urgent)||Date.parse(a.createdAt)-Date.parse(b.createdAt));
 }
